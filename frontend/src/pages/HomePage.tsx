@@ -61,7 +61,7 @@ export function HomePage() {
               </div>
               <button
                 type="submit"
-                className="bg-primary text-on-primary font-bold px-8 py-4 rounded-lg flex items-center justify-center gap-2 whitespace-nowrap hover:shadow-[0_0_20px_rgba(221,183,255,0.4)] transition-all active:scale-95"
+                className="bg-primary text-on-primary font-bold px-8 py-4 rounded-lg flex items-center justify-center gap-2 whitespace-nowrap hover:bg-secondary-fixed-dim hover:text-on-primary hover:shadow-[0_0_20px_rgba(0,230,57,0.4)] transition-all active:scale-95"
               >
                 <span
                   className="material-symbols-outlined"
