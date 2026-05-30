@@ -5,7 +5,7 @@ import { mockAstralMap } from "./mockData";
 const USE_MOCK = import.meta.env.VITE_USE_MOCK === "true";
 
 const client = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || "",
+  withCredentials: true,
   timeout: 8000,
 });
 
@@ -17,8 +17,11 @@ export async function getAstralMap(
     await new Promise((r) => setTimeout(r, 1500));
     return mockAstralMap(username);
   }
-  const { data } = await client.get<AstralMap>(`/api/astral/${username}`, {
-    signal,
-  });
+  await client.get("/sanctum/csrf-cookie");
+  const { data } = await client.post<AstralMap>(
+    "/api/astrology/analyze",
+    { username },
+    { signal },
+  );
   return data;
 }
