@@ -3,7 +3,6 @@ import { useParams } from "react-router-dom";
 import { Footer } from "../components/Footer";
 import { getAstralMap } from "../services/api";
 import type { AstralMap } from "../types/astral";
-import { NavBar } from "../components/NavBar";
 import { StarField } from "../components/StarField";
 import { LoadingOverlay } from "../components/LoadingOverlay";
 import { ErrorView } from "../components/ErrorView";
@@ -45,8 +44,7 @@ export function ResultPage() {
   return (
     <div className="font-body-md overflow-x-hidden">
       <StarField />
-      <NavBar />
-      <main className="pt-32 pb-24 px-gutter max-w-max-width mx-auto">
+      <main className="pt-12 pb-24 px-gutter max-w-max-width mx-auto">
         {loading && <LoadingOverlay />}
         {error && <ErrorView message={error} />}
         {data && (

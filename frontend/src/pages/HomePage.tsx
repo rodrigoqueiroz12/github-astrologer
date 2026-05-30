@@ -1,7 +1,6 @@
 import { useState, type FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { Footer } from "../components/Footer";
-import { NavBar } from "../components/NavBar";
 import { StarField } from "../components/StarField";
 
 export function HomePage() {
@@ -22,9 +21,19 @@ export function HomePage() {
   return (
     <div className="font-body-md overflow-x-hidden min-h-screen flex flex-col">
       <StarField />
-      <NavBar />
-      <main className="flex-1 flex items-center px-gutter py-24">
+      <main className="flex-1 flex items-center px-gutter py-16">
         <section className="flex flex-col items-center text-center w-full max-w-max-width mx-auto">
+          <div className="flex items-center gap-3 mb-10">
+            <span
+              className="material-symbols-outlined text-primary text-4xl"
+              style={{ fontVariationSettings: "'FILL' 1" }}
+            >
+              auto_awesome
+            </span>
+            <span className="font-headline-md text-headline-md text-primary tracking-tight">
+              Astrologia de Commits GitHub
+            </span>
+          </div>
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary-container/20 text-primary border border-primary/20 mb-6 font-label-md text-label-md">
             <span
               className="material-symbols-outlined text-sm"
