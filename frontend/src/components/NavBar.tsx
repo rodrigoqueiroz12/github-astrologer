@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 export function NavBar() {
   return (
-    <nav className="fixed top-0 w-full z-50 flex justify-between items-center px-gutter py-4 max-w-max-width mx-auto left-0 right-0 bg-background/60 backdrop-blur-xl border-b border-white/10">
+    <nav className="fixed top-0 w-full z-50 flex justify-between items-center px-gutter py-4 bg-background/60 backdrop-blur-xl border-b border-white/10">
       <div className="flex items-center gap-4">
         <span
           className="material-symbols-outlined text-primary text-4xl"

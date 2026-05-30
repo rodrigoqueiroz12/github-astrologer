@@ -47,6 +47,7 @@ export function HomePage() {
                 <span className="text-secondary-fixed-dim font-bold mr-2">
                   github.com/
                 </span>
+                {!username && <span className="terminal-cursor mr-1" />}
                 <input
                   type="text"
                   value={username}
@@ -57,7 +58,6 @@ export function HomePage() {
                   placeholder="usuário..."
                   className="bg-transparent border-none text-on-surface placeholder:text-outline focus:ring-0 w-full font-body-lg text-body-lg outline-none"
                 />
-                <span className="terminal-cursor" />
               </div>
               <button
                 type="submit"
