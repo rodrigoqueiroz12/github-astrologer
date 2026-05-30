@@ -22,7 +22,7 @@ class AstrologyController extends Controller
         $username = $request->validated('username');
 
         $user = null;
-        $repos = null;
+        $repos = [];
 
         $pool = $this->connector->pool(
             requests: [
@@ -32,7 +32,7 @@ class AstrologyController extends Controller
             responseHandler: function (Response $response, string $key) use (&$user, &$repos) {
                 match ($key) {
                     'user' => $user = $response->dtoOrFail(),
-                    'repos' => $repos = $response->json(),
+                    'repos' => $repos = $response->dtoOrFail(),
                 };
             }
         );
@@ -41,11 +41,9 @@ class AstrologyController extends Controller
 
         $promise->wait();
 
-        $reposNames = collect($repos)->map(fn ($repo) => ['name' => $repo['name'], 'language' => $repo['language']])->all();
-
-        $commitsRequests = function () use ($username, $reposNames) {
-            foreach ($reposNames as $repo) {
-                yield new GetRepoCommitsRequest($username, $repo['name']);
+        $commitsRequests = function () use ($username, $repos) {
+            foreach ($repos as $repo) {
+                yield new GetRepoCommitsRequest($username, $repo->name);
             }
         };
 
@@ -64,7 +62,7 @@ class AstrologyController extends Controller
 
         return response()->json([
             'github_info' => $user->toArray(),
-            'repos' => $reposNames,
+            'repos' => $repos,
             'commits' => $commits,
         ]);
     }
