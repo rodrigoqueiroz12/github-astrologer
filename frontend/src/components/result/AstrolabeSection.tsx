@@ -7,7 +7,7 @@ interface Props {
 
 export function AstrolabeSection({ astrolabe }: Props) {
   return (
-    <GlassCard className="p-12 flex flex-col items-center justify-center overflow-hidden relative">
+    <GlassCard className="p-6 md:p-12 flex flex-col items-center justify-center overflow-hidden relative">
       <div className="absolute inset-0 opacity-10 pointer-events-none">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] border border-secondary-fixed-dim rounded-full" />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] border border-primary rounded-full" />
@@ -17,7 +17,7 @@ export function AstrolabeSection({ astrolabe }: Props) {
         <h4 className="font-headline-md text-headline-md text-on-surface mb-2">
           O Astrolábio Digital
         </h4>
-        <p className="text-outline mb-12 max-w-xl text-center">
+        <p className="text-outline mb-8 md:mb-12 max-w-xl text-center">
           Calculando poços gravitacionais de repositórios e caminhos de
           sincronização de branches pelo multiverso.
         </p>
