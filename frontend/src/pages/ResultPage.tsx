@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { Footer } from "../components/Footer";
 import { getAstralMap } from "../services/api";
 import type { AstralMap } from "../types/astral";
@@ -15,6 +15,7 @@ import { AstrolabeSection } from "../components/result/AstrolabeSection";
 
 export function ResultPage() {
   const { username } = useParams<{ username: string }>();
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<AstralMap | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -44,7 +45,30 @@ export function ResultPage() {
   return (
     <div className="font-body-md overflow-x-hidden min-h-screen flex flex-col">
       <StarField />
-      <main className="flex-1 pt-12 pb-24 px-gutter max-w-max-width mx-auto w-full">
+      <header className="w-full px-gutter py-4 flex items-center justify-between border-b border-white/10 bg-background/60 backdrop-blur-xl">
+        <button
+          onClick={() => navigate("/")}
+          className="flex items-center gap-2 text-primary hover:text-secondary-fixed-dim transition-colors group"
+        >
+          <span className="material-symbols-outlined text-sm group-hover:-translate-x-1 transition-transform">
+            arrow_back
+          </span>
+          <span className="font-label-md text-label-md">Nova consulta</span>
+        </button>
+        <div className="flex items-center gap-2">
+          <span
+            className="material-symbols-outlined text-primary text-2xl"
+            style={{ fontVariationSettings: "'FILL' 1" }}
+          >
+            auto_awesome
+          </span>
+          <span className="font-headline-md text-headline-md text-primary tracking-tight hidden sm:block">
+            Astrologia de Commits GitHub
+          </span>
+        </div>
+        <div className="w-28" />
+      </header>
+      <main className="flex-1 pt-8 pb-24 px-gutter max-w-max-width mx-auto w-full">
         {loading && <LoadingOverlay />}
         {error && <ErrorView message={error} />}
         {data && (
