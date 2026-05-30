@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Ai\Agents\AstralMapGeneratorAgent;
+use App\Ai\Agents\BabelFishGeneratorAgent;
 use App\DTOs\Github\Commit;
 use App\DTOs\Github\Repo;
 use App\DTOs\Github\User;
@@ -133,6 +134,11 @@ final class AstrologyService
         return $days;
     }
 
+    /**
+     * @param  Repo[]  $repos
+     * @param  Commit[]  $commits
+     * @return array[]|array{babel_fish_trigger: array, recent_repositories: array, user_metadata: array{account_created_at: string, followers: string, public_repos_total: string}}
+     */
     protected function buildContext(User $user, array $repos, array $commits): array
     {
         $context = [
@@ -174,6 +180,11 @@ final class AstrologyService
         return $context;
     }
 
+    /**
+     * @param  Repo[]  $repos
+     * @param  Commit[]  $commits
+     * @return array{ascendant_name: mixed, ascendant_quote: mixed, ascendant_status: mixed, ascendant_tags: mixed, ascendant_title: mixed, babel_fish_haiku: mixed, babel_input_hash: mixed, babel_input_message: mixed, collaboration_flow: mixed, constellation_phase: mixed, cosmic_reach: mixed, lunar_cycle: mixed, orbital_cycles: mixed, solar_sign_description: mixed, solar_sign_tags: mixed, solar_sign_title: mixed|null}
+     */
     public function generateAstralMap(User $user, array $repos, array $commits): ?array
     {
         try {
@@ -225,6 +236,53 @@ final class AstrologyService
 
             if (! \is_array($response)) {
                 Cache::driver('redis')->forget("user:{$user->username}:astral_map");
+
+                return null;
+            }
+
+            return $response;
+        } catch (\Throwable $th) {
+            return null;
+        }
+    }
+
+    /**
+     * @param  Repo[]  $repos
+     * @param  Commit[]  $commits
+     * @return array{babel_fish_haiku: mixed, babel_input_hash: mixed, babel_input_message: mixed|null}
+     */
+    public function generateBabelFish(User $user, array $repos, array $commits): ?array
+    {
+        try {
+            $context = $this->buildContext($user, $repos, $commits);
+
+            $randomCommit = ! empty($commits) ? Arr::random($commits) : null;
+
+            $context['babel_fish_trigger'] = [
+                'sha' => $randomCommit?->sha ?? '',
+                'message' => $randomCommit?->message ?? '',
+            ];
+
+            $response = Cache::driver('redis')->remember(
+                key: "user:{$user->username}:babel_fish",
+                ttl: now()->addSeconds(5),
+                callback: function () use ($context) {
+                    $response = (new BabelFishGeneratorAgent)->prompt('Analise o contexto fornecido, focando na mensagem de commit em `babel_fish_trigger`, e gere um haiku sarcástico correspondente: '.json_encode($context));
+
+                    return [
+
+                        'babel_input_hash' => Arr::get($context, 'babel_fish_trigger.sha'),
+
+                        'babel_input_message' => Arr::get($context, 'babel_fish_trigger.message'),
+
+                        'babel_fish_haiku' => Arr::get($response, 'babel_fish_haiku'),
+
+                    ];
+                }
+            );
+
+            if (! \is_array($response)) {
+                Cache::driver('redis')->forget("user:{$user->username}:babel_fish");
 
                 return null;
             }
