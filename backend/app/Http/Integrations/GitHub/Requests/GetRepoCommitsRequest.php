@@ -50,7 +50,8 @@ class GetRepoCommitsRequest extends Request implements Cacheable
 
         return collect($data)->map(fn (array $commit) => new Commit(
             sha: Arr::get($commit, 'sha'),
-            date: Carbon::parse(Arr::get($commit, 'commit.author.date'))
+            date: Carbon::parse(Arr::get($commit, 'commit.author.date')),
+            message: Arr::get($commit, 'commit.message')
         ))->all();
     }
 
@@ -58,7 +59,7 @@ class GetRepoCommitsRequest extends Request implements Cacheable
     {
         return [
             'committer' => $this->owner,
-            'per_page' => 100,
+            'per_page' => 20,
         ];
     }
 

@@ -8,7 +8,8 @@ final class Commit
 {
     public function __construct(
         public readonly string $sha,
-        public readonly Carbon $date
+        public readonly Carbon $date,
+        public readonly string $message
     ) {
         //
     }
@@ -18,6 +19,7 @@ final class Commit
         return [
             'sha' => $this->sha,
             'date' => $this->date->toIso8601String(),
+            'message' => $this->message,
         ];
     }
 }
