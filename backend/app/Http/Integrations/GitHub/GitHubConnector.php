@@ -29,9 +29,15 @@ class GitHubConnector extends Connector
         ];
     }
 
-    protected function defaultAuth(): TokenAuthenticator
+    protected function defaultAuth(): ?TokenAuthenticator
     {
-        return new TokenAuthenticator(config('github.key'));
+        $token = config('github.key');
+
+        if (! $token) {
+            return null;
+        }
+
+        return new TokenAuthenticator($token);
     }
 
     /**

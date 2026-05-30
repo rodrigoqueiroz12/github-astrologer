@@ -1,1 +1,8 @@
 .env
+/node_modules/
+/frontend/node_modules/
+/backend/vendor/
+/frontend/dist/
+/frontend/coverage/
+backend/storage/
+backend/bootstrap/cache/

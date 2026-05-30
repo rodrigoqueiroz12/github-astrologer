@@ -30,7 +30,16 @@ class GetUserPublicEventsRequest extends Request implements Cacheable
 
     public function resolveCacheDriver(): Driver
     {
-        return new LaravelCacheDriver(Cache::store('redis'));
+        return new LaravelCacheDriver($this->resolveCacheStore());
+    }
+
+    private function resolveCacheStore()
+    {
+        if (! class_exists(\Redis::class)) {
+            return Cache::store('file');
+        }
+
+        return Cache::store('redis');
     }
 
     public function cacheExpiryInSeconds(): int

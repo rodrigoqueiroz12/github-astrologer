@@ -1,0 +1,11 @@
+# Pastas ignoradas
+node_modules/
+frontend/node_modules/
+backend/vendor/
+backend/storage/
+backend/bootstrap/cache/
+frontend/dist/
+frontend/coverage/
+node_modules/.cache/
+.git/
+
