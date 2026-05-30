@@ -20,11 +20,11 @@ export function HomePage() {
   }
 
   return (
-    <div className="font-body-md overflow-x-hidden">
+    <div className="font-body-md overflow-x-hidden min-h-screen flex flex-col">
       <StarField />
       <NavBar />
-      <main className="pt-32 pb-24 px-gutter max-w-max-width mx-auto">
-        <section className="flex flex-col items-center text-center">
+      <main className="flex-1 flex items-center px-gutter py-24">
+        <section className="flex flex-col items-center text-center w-full max-w-max-width mx-auto">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary-container/20 text-primary border border-primary/20 mb-6 font-label-md text-label-md">
             <span
               className="material-symbols-outlined text-sm"
@@ -61,7 +61,7 @@ export function HomePage() {
               </div>
               <button
                 type="submit"
-                className="bg-primary text-on-primary font-bold px-8 py-4 rounded-lg flex items-center justify-center gap-2 hover:shadow-[0_0_20px_rgba(221,183,255,0.4)] transition-all active:scale-95"
+                className="bg-primary text-on-primary font-bold px-8 py-4 rounded-lg flex items-center justify-center gap-2 whitespace-nowrap hover:shadow-[0_0_20px_rgba(221,183,255,0.4)] transition-all active:scale-95"
               >
                 <span
                   className="material-symbols-outlined"
@@ -69,7 +69,7 @@ export function HomePage() {
                 >
                   glass_cup
                 </span>
-                Gerar Mapa Astral Dev
+                Gerar Mapa Astral
               </button>
             </div>
           </form>
