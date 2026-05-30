@@ -55,7 +55,8 @@ export function HomePage() {
                     setError("");
                   }}
                   placeholder="usuário..."
-                  className="bg-transparent border-none text-on-surface placeholder:text-outline focus:ring-0 w-full font-body-lg text-body-lg outline-none caret-[#00e639]"
+                  autoFocus
+                  className="bg-transparent border-none text-on-surface placeholder:text-outline focus:ring-0 w-full font-body-lg text-body-lg outline-none caret-[#00e639] italic"
                 />
               </div>
               <button
