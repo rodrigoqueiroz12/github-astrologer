@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Integrations\GitHub\GitHubConnector;
 use App\Http\Requests\AnalyseRequest;
+use App\Http\Requests\BabelFishRequest;
 use App\Services\AstrologyService;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
@@ -83,6 +84,49 @@ class AstrologyController extends Controller
             ]);
         } catch (\Exception $e) {
             Log::error('AstrologyController@analyze', [
+                'exception' => $e,
+            ]);
+
+            return response()->json([
+                'message' => 'Server error occurred.',
+            ], 500);
+        }
+    }
+
+    public function babelFish(BabelFishRequest $request)
+    {
+        try {
+            $username = $request->validated('username');
+
+            [$user, $repos] = $this->astrologyService->getUserAndRepos($username);
+
+            if (! $user) {
+                return response()->json([
+                    'message' => 'GitHub user not found.',
+                ], 404);
+            }
+
+            $commits = $this->astrologyService->getUserCommits($username, $repos);
+
+            $babelFish = $this->astrologyService->generateBabelFish($user, $repos, $commits);
+
+            if (! $babelFish) {
+                return response()->json([
+                    'message' => 'Could not generate babel fish, try again later.',
+                ], 503);
+            }
+
+            return response()->json([
+
+                'babel_fish' => [
+                    'input_hash' => Arr::get($babelFish, 'babel_input_hash'),
+                    'input_message' => Arr::get($babelFish, 'babel_input_message'),
+                    'haiku' => Arr::get($babelFish, 'babel_fish_haiku'),
+                ],
+
+            ]);
+        } catch (\Exception $e) {
+            Log::error('AstrologyController@babelFish', [
                 'exception' => $e,
             ]);
 
