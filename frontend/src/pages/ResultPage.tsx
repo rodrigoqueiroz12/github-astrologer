@@ -33,10 +33,19 @@ export function ResultPage() {
       .then(setData)
       .catch((e) => {
         if (axios.isCancel(e)) return;
-        setError(
-          e.response?.data?.message ??
+        const raw: string =
+          e.response?.data?.message ?? "Server error occurred.";
+        const translations: Record<string, string> = {
+          "GitHub user not found.":
+            "Usuário não encontrado no GitHub. Verifique o nome e tente novamente.",
+          "Could not generate astral map, try again later.":
             "Mercúrio entrou em colapso quântico. Tente novamente em outro ciclo lunar.",
-        );
+          "Could not generate babel fish, try again later.":
+            "O Peixe de Babel está dormindo. Tente novamente.",
+          "Server error occurred.":
+            "Erro nos servidores cósmicos. Tente novamente mais tarde.",
+        };
+        setError(translations[raw] ?? raw);
       })
       .finally(() => setLoading(false));
 
@@ -48,11 +57,13 @@ export function ResultPage() {
       <StarField />
       {/* background orb — decorative, non-interactive */}
       <div
-        className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none select-none z-0 opacity-[0.06] flex items-center justify-center"
-        style={{ animation: "spin 90s linear infinite" }}
+        className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none select-none z-0 opacity-[0.06]"
         aria-hidden="true"
       >
-        <div className="w-[700px] h-[700px] rounded-full border-4 border-dashed border-primary relative flex items-center justify-center">
+        <div
+          className="w-[700px] h-[700px] rounded-full border-4 border-dashed border-primary relative flex items-center justify-center"
+          style={{ animation: "spin 90s linear infinite" }}
+        >
           <div
             className="w-5 h-5 bg-secondary-fixed-dim rounded-full absolute -top-2.5"
             style={{ boxShadow: "0 0 16px #00e639" }}
@@ -97,7 +108,7 @@ export function ResultPage() {
         </div>
         <div className="hidden sm:block w-28" />
       </header>
-      <main className="flex-1 pt-8 pb-24 px-gutter max-w-max-width mx-auto w-full">
+      <main className="flex-1 pt-8 pb-24 px-gutter max-w-max-width mx-auto w-full flex flex-col">
         {loading && <LoadingOverlay />}
         {error && <ErrorView message={error} />}
         {data && (

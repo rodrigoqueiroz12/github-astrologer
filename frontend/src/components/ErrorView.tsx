@@ -12,7 +12,7 @@ export function ErrorView({ message }: Props) {
   const navigate = useNavigate();
 
   return (
-    <div className="flex items-center justify-center min-h-[60vh] px-gutter">
+    <div className="flex-1 flex items-center justify-center px-gutter">
       <GlassCard className="p-12 max-w-lg w-full text-center">
         <span className="material-symbols-outlined text-6xl text-error mb-4 block">
           dark_mode
