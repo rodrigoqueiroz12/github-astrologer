@@ -49,6 +49,7 @@ class GetRepoCommitsRequest extends Request implements Cacheable
         $data = $response->json();
 
         return collect($data)->map(fn (array $commit) => new Commit(
+            repo: $this->repo,
             sha: Arr::get($commit, 'sha'),
             date: Carbon::parse(Arr::get($commit, 'commit.author.date')),
             message: Arr::get($commit, 'commit.message')

@@ -2,12 +2,16 @@
 
 namespace App\Services;
 
+use App\Ai\Agents\AstralMapGeneratorAgent;
 use App\DTOs\Github\Commit;
 use App\DTOs\Github\Repo;
+use App\DTOs\Github\User;
 use App\Http\Integrations\GitHub\GitHubConnector;
 use App\Http\Integrations\GitHub\Requests\GetRepoCommitsRequest;
 use App\Http\Integrations\GitHub\Requests\GetUserReposRequest;
 use App\Http\Integrations\GitHub\Requests\GetUserRequest;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Saloon\Http\Response;
 
@@ -127,5 +131,93 @@ final class AstrologyService
         }
 
         return $days;
+    }
+
+    protected function buildContext(User $user, array $repos, array $commits): array
+    {
+        $context = [
+            'user_metadata' => [
+                'account_created_at' => $user->createdAt,
+                'public_repos_total' => $user->publicRepos,
+                'followers' => $user->followers,
+            ],
+            'recent_repositories' => [],
+            'babel_fish_trigger' => [],
+        ];
+
+        foreach ($repos as $repo) {
+            $repoData = [
+                'name' => $repo->name,
+                'language' => $repo->language ?? 'Unknown',
+                'commit_messages' => [],
+                'commit_hours' => [],
+            ];
+
+            collect($commits)->filter(fn ($commit) => $commit->repo === $repo->name)->each(function (Commit $commit) use (&$repoData) {
+                $repoData['commit_messages'][] = $commit->message;
+                $repoData['commit_hours'][] = $commit->date->format('H:i');
+            });
+
+            $context['recent_repositories'][] = $repoData;
+        }
+
+        /** @var Commit|null */
+        $latestCommit = collect($commits)->sortByDesc(fn ($commit) => $commit->date)->first();
+
+        if ($latestCommit) {
+            $context['babel_fish_trigger'] = [
+                'sha' => $latestCommit->sha,
+                'message' => $latestCommit->message,
+            ];
+        }
+
+        return $context;
+    }
+
+    public function generateAstralMap(User $user, array $repos, array $commits): array
+    {
+        $context = $this->buildContext($user, $repos, $commits);
+
+        $response = (new AstralMapGeneratorAgent)->prompt('Gere um mapa astral utilizando este contexto: '.json_encode($context));
+
+        Log::debug('response', [
+            'response' => $response,
+        ]);
+
+        return [
+
+            'lunar_cycle' => Arr::get($response, 'lunar_cycle'),
+
+            'cosmic_reach' => Arr::get($response, 'cosmic_reach'),
+
+            'solar_sign_title' => Arr::get($response, 'solar_sign_title'),
+
+            'solar_sign_description' => Arr::get($response, 'solar_sign_description'),
+
+            'solar_sign_tags' => Arr::get($response, 'solar_sign_tags'),
+
+            'ascendant_name' => Arr::get($response, 'ascendant_name'),
+
+            'ascendant_status' => Arr::get($response, 'ascendant_status'),
+
+            'ascendant_title' => Arr::get($response, 'ascendant_title'),
+
+            'ascendant_tags' => Arr::get($response, 'ascendant_tags'),
+
+            'ascendant_quote' => Arr::get($response, 'ascendant_quote'),
+
+            'babel_input_hash' => Arr::get($context, 'babel_fish_trigger.sha'),
+
+            'babel_input_message' => Arr::get($context, 'babel_fish_trigger.message'),
+
+            'babel_fish_haiku' => Arr::get($response, 'babel_fish_haiku'),
+
+            'orbital_cycles' => Arr::get($response, 'orbital_cycles'),
+
+            'collaboration_flow' => Arr::get($response, 'collaboration_flow'),
+
+            'constellation_phase' => Arr::get($response, 'constellation_phase'),
+
+        ];
     }
 }

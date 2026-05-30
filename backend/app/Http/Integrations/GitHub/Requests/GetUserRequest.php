@@ -49,7 +49,10 @@ class GetUserRequest extends Request implements Cacheable
 
         return new User(
             username: Arr::get($data, 'login'),
-            avatar_url: Arr::get($data, 'avatar_url'),
+            avatarUrl: Arr::get($data, 'avatar_url'),
+            followers: Arr::get($data, 'followers'),
+            publicRepos: Arr::get($data, 'public_repos'),
+            createdAt: Arr::get($data, 'created_at')
         );
     }
 

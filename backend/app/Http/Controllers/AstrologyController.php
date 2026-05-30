@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Integrations\GitHub\GitHubConnector;
 use App\Http\Requests\AnalyseRequest;
 use App\Services\AstrologyService;
+use Illuminate\Support\Arr;
 
 class AstrologyController extends Controller
 {
@@ -23,19 +24,29 @@ class AstrologyController extends Controller
 
         $commits = $this->astrologyService->getUserCommits($username, $repos);
 
+        $map = $this->astrologyService->generateAstralMap($user, $repos, $commits);
+
         return response()->json([
             'user' => [
                 'username' => $user->username,
-                'avatar_url' => $user->avatar_url,
+                'avatar_url' => $user->avatarUrl,
                 'analysis_date' => now()->format('d/m/Y'),
-                'lunar_cycle' => null,
-                'cosmic_reach' => null,
+                'lunar_cycle' => Arr::get($map, 'lunar_cycle'),
+                'cosmic_reach' => Arr::get($map, 'cosmic_reach'),
             ],
 
             'solar_sign' => [
-                'title' => '',
-                'description' => '',
-                'tags' => [],
+                'title' => Arr::get($map, 'solar_sign_title'),
+                'description' => Arr::get($map, 'solar_sign_description'),
+                'tags' => Arr::get($map, 'solar_sign_tags'),
+            ],
+
+            'ascendant' => [
+                'name' => Arr::get($map, 'ascendant_name'),
+                'status' => Arr::get($map, 'ascendant_status'),
+                'title' => Arr::get($map, 'ascendant_title'),
+                'tags' => Arr::get($map, 'ascendant_tags'),
+                'quote' => Arr::get($map, 'ascendant_quote'),
             ],
 
             'temporal_rhythm' => [
@@ -44,16 +55,16 @@ class AstrologyController extends Controller
             ],
 
             'babel_fish' => [
-                'input_hash' => '',
-                'input_message' => '',
-                'haiku' => '',
+                'input_hash' => Arr::get($map, 'babel_input_hash'),
+                'input_message' => Arr::get($map, 'babel_input_message'),
+                'haiku' => Arr::get($map, 'babel_fish_haiku'),
             ],
 
             'astrolabe' => [
-                'orbital_cycles' => '',
+                'orbital_cycles' => Arr::get($map, 'orbital_cycles'),
                 'zodiac_repos' => \count($repos),
-                'collaboration_flow' => '',
-                'constellation_phase' => '',
+                'collaboration_flow' => Arr::get($map, 'collaboration_flow'),
+                'constellation_phase' => Arr::get($map, 'constellation_phase'),
             ],
         ]);
     }
