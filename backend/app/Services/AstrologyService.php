@@ -11,7 +11,7 @@ use App\Http\Integrations\GitHub\Requests\GetRepoCommitsRequest;
 use App\Http\Integrations\GitHub\Requests\GetUserReposRequest;
 use App\Http\Integrations\GitHub\Requests\GetUserRequest;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 use Saloon\Http\Response;
 
@@ -174,50 +174,64 @@ final class AstrologyService
         return $context;
     }
 
-    public function generateAstralMap(User $user, array $repos, array $commits): array
+    public function generateAstralMap(User $user, array $repos, array $commits): ?array
     {
-        $context = $this->buildContext($user, $repos, $commits);
+        try {
+            $context = $this->buildContext($user, $repos, $commits);
 
-        $response = (new AstralMapGeneratorAgent)->prompt('Gere um mapa astral utilizando este contexto: '.json_encode($context));
+            $response = Cache::driver('redis')->remember(
+                key: "user:{$user->username}:astral_map",
+                ttl: now()->addMinutes(30),
+                callback: function () use ($context) {
+                    $response = (new AstralMapGeneratorAgent)->prompt('Gere um mapa astral utilizando este contexto: '.json_encode($context));
 
-        Log::debug('response', [
-            'response' => $response,
-        ]);
+                    return [
 
-        return [
+                        'lunar_cycle' => Arr::get($response, 'lunar_cycle'),
 
-            'lunar_cycle' => Arr::get($response, 'lunar_cycle'),
+                        'cosmic_reach' => Arr::get($response, 'cosmic_reach'),
 
-            'cosmic_reach' => Arr::get($response, 'cosmic_reach'),
+                        'solar_sign_title' => Arr::get($response, 'solar_sign_title'),
 
-            'solar_sign_title' => Arr::get($response, 'solar_sign_title'),
+                        'solar_sign_description' => Arr::get($response, 'solar_sign_description'),
 
-            'solar_sign_description' => Arr::get($response, 'solar_sign_description'),
+                        'solar_sign_tags' => Arr::get($response, 'solar_sign_tags'),
 
-            'solar_sign_tags' => Arr::get($response, 'solar_sign_tags'),
+                        'ascendant_name' => Arr::get($response, 'ascendant_name'),
 
-            'ascendant_name' => Arr::get($response, 'ascendant_name'),
+                        'ascendant_status' => Arr::get($response, 'ascendant_status'),
 
-            'ascendant_status' => Arr::get($response, 'ascendant_status'),
+                        'ascendant_title' => Arr::get($response, 'ascendant_title'),
 
-            'ascendant_title' => Arr::get($response, 'ascendant_title'),
+                        'ascendant_tags' => Arr::get($response, 'ascendant_tags'),
 
-            'ascendant_tags' => Arr::get($response, 'ascendant_tags'),
+                        'ascendant_quote' => Arr::get($response, 'ascendant_quote'),
 
-            'ascendant_quote' => Arr::get($response, 'ascendant_quote'),
+                        'babel_input_hash' => Arr::get($context, 'babel_fish_trigger.sha'),
 
-            'babel_input_hash' => Arr::get($context, 'babel_fish_trigger.sha'),
+                        'babel_input_message' => Arr::get($context, 'babel_fish_trigger.message'),
 
-            'babel_input_message' => Arr::get($context, 'babel_fish_trigger.message'),
+                        'babel_fish_haiku' => Arr::get($response, 'babel_fish_haiku'),
 
-            'babel_fish_haiku' => Arr::get($response, 'babel_fish_haiku'),
+                        'orbital_cycles' => Arr::get($response, 'orbital_cycles'),
 
-            'orbital_cycles' => Arr::get($response, 'orbital_cycles'),
+                        'collaboration_flow' => Arr::get($response, 'collaboration_flow'),
 
-            'collaboration_flow' => Arr::get($response, 'collaboration_flow'),
+                        'constellation_phase' => Arr::get($response, 'constellation_phase'),
 
-            'constellation_phase' => Arr::get($response, 'constellation_phase'),
+                    ];
+                }
+            );
 
-        ];
+            if (! \is_array($response)) {
+                Cache::driver('redis')->forget("user:{$user->username}:astral_map");
+
+                return null;
+            }
+
+            return $response;
+        } catch (\Throwable $th) {
+            return null;
+        }
     }
 }

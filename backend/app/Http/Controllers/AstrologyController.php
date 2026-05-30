@@ -34,6 +34,12 @@ class AstrologyController extends Controller
 
             $map = $this->astrologyService->generateAstralMap($user, $repos, $commits);
 
+            if (! $map) {
+                return response()->json([
+                    'message' => 'Could not generate astral map, try again later.',
+                ], 503);
+            }
+
             return response()->json([
                 'user' => [
                     'username' => $user->username,
