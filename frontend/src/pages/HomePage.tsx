@@ -15,7 +15,7 @@ export function HomePage() {
       setError("Insira um usuário do GitHub para consultar os astros.");
       return;
     }
-    navigate(`/result/${trimmed}`);
+    navigate(`/${trimmed}`);
   }
 
   return (

@@ -29,7 +29,7 @@
 | Path                | Component    | Description         |
 | ------------------- | ------------ | ------------------- |
 | `/`                 | `HomePage`   | search input + hero |
-| `/result/:username` | `ResultPage` | full astral map     |
+| `/:username` | `ResultPage` | full astral map     |
 
 ---
 
@@ -189,7 +189,7 @@ Quando backend estiver pronto: `VITE_USE_MOCK=false`.
 - `<StarField>` fixed background
 - `<NavBar>` fixed top
 - Input: `github.com/[username input]` + terminal cursor blink
-- Submit: validates non-empty → `navigate('/result/${username}')`
+- Submit: validates non-empty → `navigate('/${username}')`
 - No API call on this page
 
 ### `ResultPage`

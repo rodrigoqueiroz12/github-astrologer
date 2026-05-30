@@ -4,7 +4,7 @@
 
 **Goal:** Build the GitHub Commit Astrologer React frontend — search input, astral map result page, loading/error states, Babel Fish widget, and Docker support.
 
-**Architecture:** Vite SPA with React Router (2 routes: `/` and `/result/:username`). All state local to each page component. Mock service layer decoupled from real API via env flag. Prototype HTML (`code.html`) is the reference for all UI — port it component by component.
+**Architecture:** Vite SPA with React Router (2 routes: `/` and `/:username`). All state local to each page component. Mock service layer decoupled from real API via env flag. Prototype HTML (`code.html`) is the reference for all UI — port it component by component.
 
 **Tech Stack:** Vite + React 18 + TypeScript 5 + React Router v7 + Axios + Tailwind CSS v3 + Google Fonts (Sora + JetBrains Mono) + Material Symbols
 
@@ -782,7 +782,7 @@ export default function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="/result/:username" element={<ResultPage />} />
+        <Route path="/:username" element={<ResultPage />} />
       </Routes>
     </BrowserRouter>
   );
@@ -863,7 +863,7 @@ export function HomePage() {
       setError("Insira um usuário do GitHub para consultar os astros.");
       return;
     }
-    navigate(`/result/${trimmed}`);
+    navigate(`/${trimmed}`);
   }
 
   return (
@@ -948,7 +948,7 @@ Abrir `http://localhost:5173`:
 
 - [ ] Hero visível com headline e input
 - [ ] Submit com campo vazio mostra erro inline
-- [ ] Submit com username navega para `/result/octocat`
+- [ ] Submit com username navega para `/octocat`
 
 - [ ] **Step 3: Commit**
 
@@ -1505,7 +1505,7 @@ export function ResultPage() {
 
 Abrir `http://localhost:5173`:
 
-- [ ] Digitar qualquer username → navegar para `/result/username`
+- [ ] Digitar qualquer username → navegar para `/username`
 - [ ] Loading overlay visível por ~1.5s
 - [ ] Grid aparece com todos os cards
 - [ ] Babel Fish toggle liga/desliga
