@@ -44,10 +44,9 @@ export function HomePage() {
             <div className="absolute -inset-1 bg-gradient-to-r from-primary to-secondary-fixed-dim rounded-xl blur opacity-25 group-hover:opacity-40 transition duration-1000" />
             <div className="relative flex flex-col md:flex-row gap-4 p-2 bg-surface-container-low rounded-xl border border-white/10">
               <div className="flex-grow flex items-center px-4">
-                <span className="text-secondary-fixed-dim font-bold mr-2">
+                <span className="text-secondary-fixed-dim font-bold italic mr-2">
                   github.com/
                 </span>
-                {!username && <span className="terminal-cursor mr-1" />}
                 <input
                   type="text"
                   value={username}
@@ -56,7 +55,7 @@ export function HomePage() {
                     setError("");
                   }}
                   placeholder="usuário..."
-                  className="bg-transparent border-none text-on-surface placeholder:text-outline focus:ring-0 w-full font-body-lg text-body-lg outline-none"
+                  className="bg-transparent border-none text-on-surface placeholder:text-outline focus:ring-0 w-full font-body-lg text-body-lg outline-none caret-[#00e639]"
                 />
               </div>
               <button
