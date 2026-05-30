@@ -6,7 +6,7 @@ const USE_MOCK = import.meta.env.VITE_USE_MOCK === "true";
 
 const client = axios.create({
   withCredentials: true,
-  timeout: 8000,
+  timeout: 60000,
 });
 
 export async function getAstralMap(

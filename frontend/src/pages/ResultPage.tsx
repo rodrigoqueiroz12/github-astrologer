@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import axios from "axios";
 import { Footer } from "../components/Footer";
 import { getAstralMap } from "../services/api";
 import type { AstralMap } from "../types/astral";
@@ -31,7 +32,7 @@ export function ResultPage() {
     getAstralMap(username, controller.signal)
       .then(setData)
       .catch((e) => {
-        if (e.name === "CanceledError") return;
+        if (axios.isCancel(e)) return;
         setError(
           e.response?.data?.error ??
             "Mercúrio entrou em colapso quântico. Tente novamente em outro ciclo lunar.",
@@ -66,29 +67,29 @@ export function ResultPage() {
             Astrologia de Commits GitHub
           </span>
         </div>
-        <div className="w-28" />
+        <div className="hidden sm:block w-28" />
       </header>
       <main className="flex-1 pt-8 pb-24 px-gutter max-w-max-width mx-auto w-full">
         {loading && <LoadingOverlay />}
         {error && <ErrorView message={error} />}
         {data && (
           <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
-            <div className="md:col-span-4 lg:col-span-3 h-full">
-              <UserProfileCard user={data.user} />
+            <div className="md:col-span-3 h-full">
+              <UserProfileCard user={data.user} astrolabe={data.astrolabe} />
             </div>
-            <div className="md:col-span-8 lg:col-span-6 h-full">
+            <div className="md:col-span-9 h-full">
               <SolarSignCard solarSign={data.solar_sign} />
-            </div>
-            <div className="md:col-span-12 lg:col-span-3 h-full">
-              <AscendantCard ascendant={data.ascendant} />
             </div>
             <div className="md:col-span-8 h-full">
               <CommitChart temporalRhythm={data.temporal_rhythm} />
             </div>
             <div className="md:col-span-4 h-full">
+              <AscendantCard ascendant={data.ascendant} />
+            </div>
+            <div className="md:col-span-5 h-full">
               <BabelFishWidget babelFish={data.babel_fish} />
             </div>
-            <div className="md:col-span-12">
+            <div className="md:col-span-7">
               <AstrolabeSection astrolabe={data.astrolabe} />
             </div>
           </div>

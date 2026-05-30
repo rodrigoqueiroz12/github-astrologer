@@ -13,16 +13,16 @@ export function AstrolabeSection({ astrolabe }: Props) {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] border border-primary rounded-full" />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] border border-secondary-fixed-dim/50 rounded-full" />
       </div>
-      <div className="relative z-10 flex flex-col items-center">
+      <div className="relative z-10 flex flex-col items-center w-full">
         <h4 className="font-headline-md text-headline-md text-on-surface mb-2">
           O Astrolábio Digital
         </h4>
-        <p className="text-outline mb-8 md:mb-12 max-w-xl text-center">
+        <p className="text-outline mb-8 md:mb-12 max-w-xl text-center text-body-sm">
           Calculando poços gravitacionais de repositórios e caminhos de
           sincronização de branches pelo multiverso.
         </p>
         <div
-          className="w-64 h-64 rounded-full border-4 border-dashed border-primary/40 flex items-center justify-center relative"
+          className="hidden md:flex w-64 h-64 rounded-full border-4 border-dashed border-primary/40 items-center justify-center relative"
           style={{ animation: "spin 60s linear infinite" }}
         >
           <div
@@ -42,7 +42,7 @@ export function AstrolabeSection({ astrolabe }: Props) {
             </span>
           </div>
         </div>
-        <div className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-8 w-full max-w-3xl">
+        <div className="mt-0 md:mt-12 grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 w-full max-w-3xl">
           {[
             {
               value: astrolabe.orbital_cycles,
