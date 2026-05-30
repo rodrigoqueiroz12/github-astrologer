@@ -42,9 +42,9 @@ export function ResultPage() {
   }, [username]);
 
   return (
-    <div className="font-body-md overflow-x-hidden">
+    <div className="font-body-md overflow-x-hidden min-h-screen flex flex-col">
       <StarField />
-      <main className="pt-12 pb-24 px-gutter max-w-max-width mx-auto">
+      <main className="flex-1 pt-12 pb-24 px-gutter max-w-max-width mx-auto w-full">
         {loading && <LoadingOverlay />}
         {error && <ErrorView message={error} />}
         {data && (
