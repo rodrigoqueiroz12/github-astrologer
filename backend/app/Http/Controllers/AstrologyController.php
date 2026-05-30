@@ -3,16 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Http\Integrations\GitHub\GitHubConnector;
-use App\Http\Integrations\GitHub\Requests\GetRepoCommitsRequest;
-use App\Http\Integrations\GitHub\Requests\GetUserReposRequest;
-use App\Http\Integrations\GitHub\Requests\GetUserRequest;
 use App\Http\Requests\AnalyseRequest;
-use Saloon\Http\Response;
+use App\Services\AstrologyService;
 
 class AstrologyController extends Controller
 {
-    public function __construct(public readonly GitHubConnector $connector)
-    {
+    public function __construct(
+        public readonly GitHubConnector $connector,
+        public readonly AstrologyService $astrologyService
+    ) {
         //
     }
 
@@ -20,49 +19,42 @@ class AstrologyController extends Controller
     {
         $username = $request->validated('username');
 
-        $user = null;
-        $repos = [];
+        [$user, $repos] = $this->astrologyService->getUserAndRepos($username);
 
-        $pool = $this->connector->pool(
-            requests: [
-                'user' => new GetUserRequest($username),
-                'repos' => new GetUserReposRequest($username),
-            ],
-            responseHandler: function (Response $response, string $key) use (&$user, &$repos) {
-                match ($key) {
-                    'user' => $user = $response->dtoOrFail(),
-                    'repos' => $repos = $response->dtoOrFail(),
-                };
-            }
-        );
-
-        $promise = $pool->send();
-
-        $promise->wait();
-
-        $commitsRequests = function () use ($username, $repos) {
-            foreach ($repos as $repo) {
-                yield new GetRepoCommitsRequest($username, $repo->name);
-            }
-        };
-
-        $commits = [];
-
-        $commitsPool = $this->connector->pool(
-            requests: $commitsRequests,
-            responseHandler: function (Response $response) use (&$commits) {
-                $commits = [...$commits, ...$response->json()];
-            }
-        );
-
-        $commitsPromise = $commitsPool->send();
-
-        $commitsPromise->wait();
+        $commits = $this->astrologyService->getUserCommits($username, $repos);
 
         return response()->json([
-            'github_info' => $user->toArray(),
-            'repos' => $repos,
-            'commits' => $commits,
+            'user' => [
+                'username' => $user->username,
+                'avatar_url' => $user->avatar_url,
+                'analysis_date' => now()->format('d/m/Y'),
+                'lunar_cycle' => null,
+                'cosmic_reach' => null,
+            ],
+
+            'solar_sign' => [
+                'title' => '',
+                'description' => '',
+                'tags' => [],
+            ],
+
+            'temporal_rhythm' => [
+                'sync_rate' => $this->astrologyService->calculateTemporalRhythmSyncRate($commits),
+                'chart_data' => $this->astrologyService->calculateTemporalRhythmChartData($commits),
+            ],
+
+            'babel_fish' => [
+                'input_hash' => '',
+                'input_message' => '',
+                'haiku' => '',
+            ],
+
+            'astrolabe' => [
+                'orbital_cycles' => '',
+                'zodiac_repos' => \count($repos),
+                'collaboration_flow' => '',
+                'constellation_phase' => '',
+            ],
         ]);
     }
 }

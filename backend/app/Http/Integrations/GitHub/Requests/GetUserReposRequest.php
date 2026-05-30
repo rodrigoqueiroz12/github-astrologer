@@ -43,7 +43,6 @@ class GetUserReposRequest extends Request implements Cacheable
         return "users:{$this->username}:repos";
     }
 
-    /** @return Repo[] */
     public function createDtoFromResponse(Response $response): array
     {
         $data = $response->json();

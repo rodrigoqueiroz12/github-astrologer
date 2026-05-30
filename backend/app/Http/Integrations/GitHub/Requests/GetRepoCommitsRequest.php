@@ -2,6 +2,9 @@
 
 namespace App\Http\Integrations\GitHub\Requests;
 
+use App\DTOs\Github\Commit;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Saloon\CachePlugin\Contracts\Cacheable;
 use Saloon\CachePlugin\Contracts\Driver;
@@ -10,6 +13,7 @@ use Saloon\CachePlugin\Traits\HasCaching;
 use Saloon\Enums\Method;
 use Saloon\Http\PendingRequest;
 use Saloon\Http\Request;
+use Saloon\Http\Response;
 
 class GetRepoCommitsRequest extends Request implements Cacheable
 {
@@ -38,6 +42,16 @@ class GetRepoCommitsRequest extends Request implements Cacheable
     protected function cacheKey(PendingRequest $pendingRequest): string
     {
         return "users:{$this->owner}:repos:{$this->repo}:commits";
+    }
+
+    public function createDtoFromResponse(Response $response): array
+    {
+        $data = $response->json();
+
+        return collect($data)->map(fn (array $commit) => new Commit(
+            sha: Arr::get($commit, 'sha'),
+            date: Carbon::parse(Arr::get($commit, 'date'))
+        ))->all();
     }
 
     public function defaultQuery(): array
