@@ -6,5 +6,9 @@ interface Props {
 }
 
 export function GlassCard({ children, className = "" }: Props) {
-  return <div className={`glass-card rounded-xl ${className}`}>{children}</div>;
+  return (
+    <div className={`glass-card rounded-xl h-full ${className}`}>
+      {children}
+    </div>
+  );
 }

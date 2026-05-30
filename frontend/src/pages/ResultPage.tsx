@@ -49,19 +49,19 @@ export function ResultPage() {
         {error && <ErrorView message={error} />}
         {data && (
           <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
-            <div className="md:col-span-4 lg:col-span-3">
+            <div className="md:col-span-4 lg:col-span-3 h-full">
               <UserProfileCard user={data.user} />
             </div>
-            <div className="md:col-span-8 lg:col-span-6">
+            <div className="md:col-span-8 lg:col-span-6 h-full">
               <SolarSignCard solarSign={data.solar_sign} />
             </div>
-            <div className="md:col-span-12 lg:col-span-3">
+            <div className="md:col-span-12 lg:col-span-3 h-full">
               <AscendantCard ascendant={data.ascendant} />
             </div>
-            <div className="md:col-span-8">
+            <div className="md:col-span-8 h-full">
               <CommitChart temporalRhythm={data.temporal_rhythm} />
             </div>
-            <div className="md:col-span-4">
+            <div className="md:col-span-4 h-full">
               <BabelFishWidget babelFish={data.babel_fish} />
             </div>
             <div className="md:col-span-12">
