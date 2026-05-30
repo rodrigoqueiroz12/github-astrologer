@@ -20,7 +20,7 @@ export function SolarSignCard({ solarSign }: Props) {
         <span className="material-symbols-outlined text-sm">wb_sunny</span>
         SIGNO SOLAR
       </h4>
-      <h3 className="font-headline-xl text-headline-xl text-on-surface mb-4">
+      <h3 className="font-headline-xl text-[24px] md:text-headline-xl text-on-surface mb-4">
         Elemento Dominante: {solarSign.title}
       </h3>
       <p className="text-on-surface-variant text-body-md leading-relaxed max-w-lg">

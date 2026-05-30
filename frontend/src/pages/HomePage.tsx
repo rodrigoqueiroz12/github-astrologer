@@ -34,7 +34,7 @@ export function HomePage() {
             </span>
             ANÁLISE ORBITAL FASE 2.4 ATIVA
           </div>
-          <h2 className="font-headline-xl text-headline-xl text-on-surface mb-8 max-w-3xl">
+          <h2 className="font-headline-xl text-[28px] md:text-headline-xl text-on-surface mb-8 max-w-3xl">
             Decifre o Padrão do seu Código Cósmico
           </h2>
           <form
