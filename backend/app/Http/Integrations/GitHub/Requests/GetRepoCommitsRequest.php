@@ -58,7 +58,7 @@ class GetRepoCommitsRequest extends Request implements Cacheable
     {
         return [
             'committer' => $this->owner,
-            'per_page' => 10,
+            'per_page' => 50,
         ];
     }
 

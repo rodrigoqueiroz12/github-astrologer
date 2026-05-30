@@ -8,7 +8,7 @@ use App\Http\Integrations\GitHub\GitHubConnector;
 use App\Http\Integrations\GitHub\Requests\GetRepoCommitsRequest;
 use App\Http\Integrations\GitHub\Requests\GetUserReposRequest;
 use App\Http\Integrations\GitHub\Requests\GetUserRequest;
-use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use Saloon\Http\Response;
 
 final class AstrologyService
@@ -78,7 +78,7 @@ final class AstrologyService
      */
     public function calculateTemporalRhythmSyncRate(array $commits): string
     {
-        $activeDays = array_filter($this->calculateTemporalRhythmChartData($commits), fn ($value) => $value > 0);
+        $activeDays = array_filter($this->calculateTemporalRhythm($commits), fn ($value) => $value > 0);
 
         $rate = (\count($activeDays) / 7) * 100;
 
@@ -88,9 +88,9 @@ final class AstrologyService
     /**
      * @param  Commit[]  $commits
      */
-    public function calculateTemporalRhythmChartData(array $commits): array
+    public function calculateTemporalRhythm(array $commits): array
     {
-        $chartData = [
+        $days = [
             'MON' => 0,
             'TUE' => 0,
             'WED' => 0,
@@ -100,14 +100,32 @@ final class AstrologyService
             'SUN' => 0,
         ];
 
-        foreach ($commits as $commit) {
-            $day = strtoupper($commit->date->format('D'));
+        $totalCommits = 0;
 
-            if (Arr::has($chartData, $day)) {
-                $chartData[$day]++;
-            }
+        foreach ($commits as $commit) {
+            $dayName = Str::upper($commit->date->dayOfWeek());
+
+            $map = [
+                0 => 'SUN',
+                1 => 'MON',
+                2 => 'TUE',
+                3 => 'WED',
+                4 => 'THU',
+                5 => 'FRI',
+                6 => 'SAT',
+            ];
+
+            $cleanDay = $map[$dayName] ?? 'MON';
+
+            $days[$cleanDay]++;
+
+            $totalCommits++;
         }
 
-        return $chartData;
+        if ($totalCommits === 0) {
+            return $days;
+        }
+
+        return $days;
     }
 }

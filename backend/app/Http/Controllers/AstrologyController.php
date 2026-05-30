@@ -40,7 +40,7 @@ class AstrologyController extends Controller
 
             'temporal_rhythm' => [
                 'sync_rate' => $this->astrologyService->calculateTemporalRhythmSyncRate($commits),
-                'chart_data' => $this->astrologyService->calculateTemporalRhythmChartData($commits),
+                'chart_data' => $this->astrologyService->calculateTemporalRhythm($commits),
             ],
 
             'babel_fish' => [
