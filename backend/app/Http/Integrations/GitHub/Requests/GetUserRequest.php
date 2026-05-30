@@ -17,13 +17,14 @@ use Saloon\Http\Response;
 class GetUserRequest extends Request implements Cacheable
 {
     use HasCaching;
-    
+
     /**
      * The HTTP method of the request
      */
     protected Method $method = Method::GET;
 
-    public function __construct(protected readonly string $username) {
+    public function __construct(protected readonly string $username)
+    {
         //
     }
 
@@ -31,7 +32,7 @@ class GetUserRequest extends Request implements Cacheable
     {
         return new LaravelCacheDriver(Cache::store('redis'));
     }
-    
+
     public function cacheExpiryInSeconds(): int
     {
         return 3600; // one hour
@@ -45,7 +46,7 @@ class GetUserRequest extends Request implements Cacheable
     public function createDtoFromResponse(Response $response): mixed
     {
         $data = $response->json();
-    
+
         return new User(
             username: Arr::get($data, 'login'),
             avatar_url: Arr::get($data, 'avatar_url'),

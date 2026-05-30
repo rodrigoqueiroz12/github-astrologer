@@ -23,7 +23,8 @@ class GetUserReposRequest extends Request implements Cacheable
      */
     protected Method $method = Method::GET;
 
-    public function __construct(protected readonly string $username) {
+    public function __construct(protected readonly string $username)
+    {
         //
     }
 
@@ -31,7 +32,7 @@ class GetUserReposRequest extends Request implements Cacheable
     {
         return new LaravelCacheDriver(Cache::store('redis'));
     }
-    
+
     public function cacheExpiryInSeconds(): int
     {
         return 3600;
@@ -46,7 +47,7 @@ class GetUserReposRequest extends Request implements Cacheable
     public function createDtoFromResponse(Response $response): array
     {
         $data = $response->json();
-    
+
         return collect($data)->map(fn (array $repo) => new Repo(
             name: Arr::get($repo, 'name'),
             language: Arr::get($repo, 'language'),

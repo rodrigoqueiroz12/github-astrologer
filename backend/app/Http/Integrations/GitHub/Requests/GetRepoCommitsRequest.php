@@ -20,7 +20,8 @@ class GetRepoCommitsRequest extends Request implements Cacheable
      */
     protected Method $method = Method::GET;
 
-    public function __construct(protected readonly string $owner, protected readonly string $repo) {
+    public function __construct(protected readonly string $owner, protected readonly string $repo)
+    {
         //
     }
 
@@ -28,7 +29,7 @@ class GetRepoCommitsRequest extends Request implements Cacheable
     {
         return new LaravelCacheDriver(Cache::store('redis'));
     }
-    
+
     public function cacheExpiryInSeconds(): int
     {
         return 3600;
@@ -43,7 +44,7 @@ class GetRepoCommitsRequest extends Request implements Cacheable
     {
         return [
             'committer' => $this->owner,
-            'per_page' => 10
+            'per_page' => 10,
         ];
     }
 

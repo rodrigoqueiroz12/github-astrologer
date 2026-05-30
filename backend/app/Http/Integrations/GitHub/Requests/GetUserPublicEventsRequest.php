@@ -2,7 +2,6 @@
 
 namespace App\Http\Integrations\GitHub\Requests;
 
-use App\DTOs\Github\PublicEvent;
 use Illuminate\Support\Facades\Cache;
 use Saloon\CachePlugin\Contracts\Cacheable;
 use Saloon\CachePlugin\Contracts\Driver;
@@ -11,12 +10,11 @@ use Saloon\CachePlugin\Traits\HasCaching;
 use Saloon\Enums\Method;
 use Saloon\Http\PendingRequest;
 use Saloon\Http\Request;
-use Saloon\Http\Response;
 
 class GetUserPublicEventsRequest extends Request implements Cacheable
 {
     use HasCaching;
-    
+
     /**
      * The HTTP method of the request
      */
@@ -34,7 +32,7 @@ class GetUserPublicEventsRequest extends Request implements Cacheable
     {
         return new LaravelCacheDriver(Cache::store('redis'));
     }
-    
+
     public function cacheExpiryInSeconds(): int
     {
         return 1800; // thirty minutes

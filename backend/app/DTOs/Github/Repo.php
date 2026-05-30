@@ -7,8 +7,7 @@ final class Repo
     public function __construct(
         public readonly string $name,
         public readonly ?string $language,
-    )
-    {
+    ) {
         //
     }
 

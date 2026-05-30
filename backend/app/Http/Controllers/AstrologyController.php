@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\DTOs\Github\User;
 use App\Http\Integrations\GitHub\GitHubConnector;
 use App\Http\Integrations\GitHub\Requests\GetRepoCommitsRequest;
 use App\Http\Integrations\GitHub\Requests\GetUserReposRequest;

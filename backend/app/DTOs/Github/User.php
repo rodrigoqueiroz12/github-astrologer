@@ -2,7 +2,8 @@
 
 namespace App\DTOs\Github;
 
-class User {
+class User
+{
     public function __construct(
         public readonly string $username,
         public readonly string $avatar_url,
