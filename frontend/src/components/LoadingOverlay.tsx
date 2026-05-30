@@ -19,7 +19,7 @@ export function LoadingOverlay() {
   }, []);
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-[80vh] gap-12">
+    <div className="fixed inset-0 z-50 flex flex-col items-center justify-center gap-12 bg-background/90 backdrop-blur-sm">
       <div
         className="w-64 h-64 rounded-full border-4 border-dashed border-primary/40 flex items-center justify-center relative"
         style={{ animation: "spin 60s linear infinite" }}

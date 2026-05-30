@@ -31,40 +31,24 @@ export function UserProfileCard({ user, astrolabe }: Props) {
       <h3 className="font-headline-md text-headline-md text-on-surface">
         @{user.username}
       </h3>
-      <p className="text-outline font-label-md text-label-md mt-1 mb-6">
-        Análise: {user.analysis_date}
-      </p>
+      <div className="mb-6" />
 
-      <div className="w-full space-y-3 border-t border-white/5 pt-5">
-        <div className="flex justify-between text-body-sm font-body-sm">
-          <span className="text-on-surface-variant">Ciclo Orbital</span>
-          <span className="text-secondary-fixed-dim font-medium">
+      <div className="w-full space-y-4 border-t border-white/5 pt-5 text-left">
+        <div>
+          <p className="text-label-sm text-outline uppercase tracking-wider mb-1">
+            Ciclo Orbital
+          </p>
+          <p className="text-body-sm text-secondary-fixed-dim font-medium line-clamp-2">
             {user.lunar_cycle}
-          </span>
+          </p>
         </div>
-        <div className="flex justify-between text-body-sm font-body-sm">
-          <span className="text-on-surface-variant">Alcance Cósmico</span>
-          <span className="text-secondary-fixed-dim font-medium">
+        <div>
+          <p className="text-label-sm text-outline uppercase tracking-wider mb-1">
+            Alcance Cósmico
+          </p>
+          <p className="text-body-sm text-secondary-fixed-dim font-medium line-clamp-2">
             {user.cosmic_reach}
-          </span>
-        </div>
-        <div className="flex justify-between text-body-sm font-body-sm">
-          <span className="text-on-surface-variant">Repositórios</span>
-          <span className="text-primary font-medium">
-            {astrolabe.zodiac_repos}
-          </span>
-        </div>
-        <div className="flex justify-between text-body-sm font-body-sm">
-          <span className="text-on-surface-variant">Fase</span>
-          <span className="text-primary font-medium truncate ml-2 max-w-[120px] text-right">
-            {astrolabe.constellation_phase}
-          </span>
-        </div>
-        <div className="flex justify-between text-body-sm font-body-sm">
-          <span className="text-on-surface-variant">Colaboração</span>
-          <span className="text-primary font-medium truncate ml-2 max-w-[120px] text-right">
-            {astrolabe.collaboration_flow}
-          </span>
+          </p>
         </div>
       </div>
 

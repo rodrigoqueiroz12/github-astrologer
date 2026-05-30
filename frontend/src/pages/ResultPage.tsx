@@ -34,7 +34,7 @@ export function ResultPage() {
       .catch((e) => {
         if (axios.isCancel(e)) return;
         setError(
-          e.response?.data?.error ??
+          e.response?.data?.message ??
             "Mercúrio entrou em colapso quântico. Tente novamente em outro ciclo lunar.",
         );
       })
@@ -46,6 +46,34 @@ export function ResultPage() {
   return (
     <div className="font-body-md overflow-x-hidden min-h-screen flex flex-col">
       <StarField />
+      {/* background orb — decorative, non-interactive */}
+      <div
+        className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none select-none z-0 opacity-[0.06] flex items-center justify-center"
+        style={{ animation: "spin 90s linear infinite" }}
+        aria-hidden="true"
+      >
+        <div className="w-[700px] h-[700px] rounded-full border-4 border-dashed border-primary relative flex items-center justify-center">
+          <div
+            className="w-5 h-5 bg-secondary-fixed-dim rounded-full absolute -top-2.5"
+            style={{ boxShadow: "0 0 16px #00e639" }}
+          />
+          <div
+            className="w-5 h-5 bg-primary rounded-full absolute -bottom-2.5"
+            style={{ boxShadow: "0 0 16px #ddb7ff" }}
+          />
+          <div
+            className="w-[560px] h-[560px] rounded-full border border-secondary-fixed-dim/60 flex items-center justify-center"
+            style={{ animation: "spin 45s linear infinite reverse" }}
+          >
+            <span
+              className="material-symbols-outlined text-on-surface-variant"
+              style={{ fontSize: "10rem" }}
+            >
+              language
+            </span>
+          </div>
+        </div>
+      </div>
       <header className="w-full px-gutter py-4 flex items-center justify-between border-b border-white/10 bg-background/60 backdrop-blur-xl">
         <button
           onClick={() => navigate("/")}
@@ -74,11 +102,14 @@ export function ResultPage() {
         {error && <ErrorView message={error} />}
         {data && (
           <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
-            <div className="md:col-span-3 h-full">
+            <div className="md:col-span-4 h-full">
               <UserProfileCard user={data.user} astrolabe={data.astrolabe} />
             </div>
-            <div className="md:col-span-9 h-full">
-              <SolarSignCard solarSign={data.solar_sign} />
+            <div className="md:col-span-8 h-full">
+              <SolarSignCard
+                solarSign={data.solar_sign}
+                analysisDate={data.user.analysis_date}
+              />
             </div>
             <div className="md:col-span-8 h-full">
               <CommitChart temporalRhythm={data.temporal_rhythm} />
@@ -87,7 +118,10 @@ export function ResultPage() {
               <AscendantCard ascendant={data.ascendant} />
             </div>
             <div className="md:col-span-5 h-full">
-              <BabelFishWidget babelFish={data.babel_fish} />
+              <BabelFishWidget
+                babelFish={data.babel_fish}
+                username={data.user.username}
+              />
             </div>
             <div className="md:col-span-7">
               <AstrolabeSection astrolabe={data.astrolabe} />

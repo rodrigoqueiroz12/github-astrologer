@@ -15,7 +15,16 @@ interface Props {
   temporalRhythm: AstralMap["temporal_rhythm"];
 }
 
-const DAY_ORDER = ["SEG", "TER", "QUA", "QUI", "SEX", "SAB", "DOM"] as const;
+const DAY_ORDER = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"] as const;
+const DAY_LABEL: Record<string, string> = {
+  MON: "SEG",
+  TUE: "TER",
+  WED: "QUA",
+  THU: "QUI",
+  FRI: "SEX",
+  SAT: "SAB",
+  SUN: "DOM",
+};
 
 interface TooltipContentProps {
   active?: boolean;
@@ -40,7 +49,10 @@ function CustomTooltip({ active, payload, label }: TooltipContentProps) {
 export function CommitChart({ temporalRhythm }: Props) {
   const { chart_data, sync_rate } = temporalRhythm;
 
-  const data = DAY_ORDER.map((day) => ({ day, commits: chart_data[day] }));
+  const data = DAY_ORDER.map((key) => ({
+    day: DAY_LABEL[key],
+    commits: (chart_data as Record<string, number>)[key] ?? 0,
+  }));
   const maxValue = Math.max(...data.map((d) => d.commits));
 
   return (

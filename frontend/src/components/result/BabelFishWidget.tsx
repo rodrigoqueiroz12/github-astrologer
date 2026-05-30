@@ -1,21 +1,31 @@
 import { useState } from "react";
 import type { AstralMap } from "../../types/astral";
 import { GlassCard } from "../GlassCard";
+import { regenerateBabelFish } from "../../services/api";
 
 interface Props {
   babelFish: AstralMap["babel_fish"];
+  username: string;
 }
 
-export function BabelFishWidget({ babelFish }: Props) {
+export function BabelFishWidget({ babelFish, username }: Props) {
+  const [current, setCurrent] = useState(babelFish);
   const [lines, setLines] = useState(babelFish.haiku.split("\n"));
-  const [shuffling, setShuffling] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  function realign() {
-    setShuffling(true);
-    setTimeout(() => {
-      setLines((prev) => [...prev].sort(() => Math.random() - 0.5));
-      setShuffling(false);
-    }, 300);
+  async function realign() {
+    setLoading(true);
+    setError(null);
+    try {
+      const fresh = await regenerateBabelFish(username);
+      setCurrent(fresh);
+      setLines(fresh.haiku.split("\n"));
+    } catch {
+      setError("Mercúrio retrógrado bloqueou a transmissão. Tente novamente.");
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -36,10 +46,10 @@ export function BabelFishWidget({ babelFish }: Props) {
 
       <div className="p-3 bg-black/50 rounded-lg border border-white/5 font-mono text-xs mb-4">
         <div className="text-secondary-fixed-dim mb-1 opacity-60">
-          ENTRADA: {babelFish.input_hash}
+          ENTRADA: {current.input_hash}
         </div>
         <p className="text-on-surface-variant leading-relaxed">
-          {babelFish.input_message}
+          {current.input_message}
         </p>
       </div>
 
@@ -67,31 +77,44 @@ export function BabelFishWidget({ babelFish }: Props) {
         >
           ✦
         </div>
-        <div
-          className={`text-center transition-opacity duration-300 ${shuffling ? "opacity-0" : "opacity-100"}`}
-        >
-          {lines.map((line, i) => (
-            <p
-              key={i}
-              className="text-primary italic leading-loose"
-              style={{ fontSize: i === 1 ? "1.05rem" : "0.95rem" }}
+        {loading ? (
+          <div className="flex flex-col items-center gap-3">
+            <span
+              className="material-symbols-outlined text-primary text-3xl"
+              style={{ animation: "spin 1s linear infinite" }}
             >
-              {line}
-            </p>
-          ))}
-        </div>
+              refresh
+            </span>
+            <p className="text-outline text-xs">Canalizando o cosmos...</p>
+          </div>
+        ) : (
+          <div className="text-center transition-opacity duration-300">
+            {lines.map((line, i) => (
+              <p
+                key={i}
+                className="text-primary italic leading-loose"
+                style={{ fontSize: i === 1 ? "1.05rem" : "0.95rem" }}
+              >
+                {line}
+              </p>
+            ))}
+          </div>
+        )}
         <div className="text-[10px] text-primary/40 font-bold uppercase tracking-widest mt-4">
           Astra-Haiku Gerado
         </div>
       </div>
 
+      {error && <p className="text-error text-xs text-center mb-3">{error}</p>}
+
       <button
         onClick={realign}
-        className="w-full py-3 rounded-lg border border-primary/40 text-primary font-bold hover:bg-primary/10 hover:border-primary transition-all flex items-center justify-center gap-2 active:scale-95"
+        disabled={loading}
+        className="w-full py-3 rounded-lg border border-primary/40 text-primary font-bold hover:bg-primary/10 hover:border-primary transition-all flex items-center justify-center gap-2 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
       >
         <span
           className="material-symbols-outlined text-sm"
-          style={shuffling ? { animation: "spin 0.3s linear" } : undefined}
+          style={loading ? { animation: "spin 1s linear infinite" } : undefined}
         >
           refresh
         </span>
