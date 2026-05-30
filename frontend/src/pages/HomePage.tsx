@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
+import { Footer } from "../components/Footer";
 import { NavBar } from "../components/NavBar";
 import { StarField } from "../components/StarField";
 
@@ -81,6 +82,7 @@ export function HomePage() {
           </p>
         </section>
       </main>
+      <Footer />
     </div>
   );
 }
