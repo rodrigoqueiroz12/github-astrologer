@@ -12,7 +12,7 @@ export function AscendantCard({ ascendant }: Props) {
         TRÂNSITO ASCENDENTE
       </h4>
       <div className="flex items-center gap-3 mb-6">
-        <div className="p-3 bg-secondary-fixed-dim/10 rounded-lg">
+        <div className="inline-flex p-3 bg-secondary-fixed-dim/10 rounded-lg">
           <span className="material-symbols-outlined text-secondary-fixed-dim">
             cyclone
           </span>
