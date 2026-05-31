@@ -41,6 +41,7 @@ Copie a chave gerada (formato `base64:...`).
 APP_KEY=base64:SUA_CHAVE_AQUI
 GITHUB_API_KEY=ghp_SeuTokenGitHub
 GEMINI_API_KEY=SuaChaveGemini
+VITE_API_BASE_URL=http://localhost:8000
 ```
 
 > O `.env` é lido pelo `docker-compose.yml` e repassado aos containers — não é necessário criar `.env` separado no `frontend/` ou `backend/`.
@@ -62,11 +63,12 @@ Digite um usuário do GitHub e gere seu mapa astral.
 
 ## Variáveis de ambiente
 
-| Variável         | Descrição                              | Obrigatório |
-| ---------------- | -------------------------------------- | ----------- |
-| `APP_KEY`        | Chave de criptografia do Laravel       | Sim         |
-| `GITHUB_API_KEY` | Token de acesso à API do GitHub        | Sim         |
-| `GEMINI_API_KEY` | Chave da API Gemini (Google AI Studio) | Sim         |
+| Variável            | Descrição                              | Obrigatório |
+| ------------------- | -------------------------------------- | ----------- |
+| `APP_KEY`           | Chave de criptografia do Laravel       | Sim         |
+| `GITHUB_API_KEY`    | Token de acesso à API do GitHub        | Sim         |
+| `GEMINI_API_KEY`    | Chave da API Gemini (Google AI Studio) | Sim         |
+| `VITE_API_BASE_URL` | URL base da API consultada pelo frontend (ex: http://localhost:8000) | Não (opcional) |
 
 ## Comandos úteis
 
