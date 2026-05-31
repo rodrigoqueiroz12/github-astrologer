@@ -12,7 +12,9 @@ services:
       - app
 
   backend:
-    build: ./backend
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile.dev
     ports:
       - "127.0.0.1:8000:80"
     environment:
