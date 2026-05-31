@@ -35,7 +35,7 @@ export function AstrolabeSection({ astrolabe }: Props) {
             </div>
           </div>
           <div className="text-center">
-            <div className="text-body-sm text-primary leading-snug line-clamp-3">
+            <div className="text-body-sm text-primary leading-snug line-clamp-3" title={astrolabe.collaboration_flow}>
               {astrolabe.collaboration_flow}
             </div>
             <div className="text-label-md text-outline mt-2">
@@ -43,7 +43,7 @@ export function AstrolabeSection({ astrolabe }: Props) {
             </div>
           </div>
           <div className="text-center">
-            <div className="text-body-sm text-secondary-fixed-dim leading-snug line-clamp-3">
+            <div className="text-body-sm text-secondary-fixed-dim leading-snug line-clamp-3" title={astrolabe.constellation_phase}>
               {astrolabe.constellation_phase}
             </div>
             <div className="text-label-md text-outline mt-2">FASE CONSTEL.</div>
